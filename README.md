@@ -31,3 +31,6 @@ To deploy this project run
 
 ![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
 
+<img width="920" height="680" alt="image" src="https://github.com/user-attachments/assets/873a69fd-65e4-45c0-b58c-8d0a407b4ca0" />
+<img width="773" height="338" alt="image" src="https://github.com/user-attachments/assets/e26594f9-a759-4029-9b4d-d29d921d3090" />
+
