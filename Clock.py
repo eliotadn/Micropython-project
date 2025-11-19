@@ -1,21 +1,27 @@
 from machine import Pin, I2C
 import network, ntptime, time
+from machine import Pin, PWM
+# Buzzer
+buzzer = Pin(27, Pin.OUT) 
 # Wifi
 WIFI_SSID = "UREL-SC661-V-2.4G"
 WIFI_PSK  = "TomFryza"
 TZ_OFFSET_H = 1
-#Config LED 
-led = Pin(2, Pin.OUT)
-def blink_led(duration_s=5, interval=0.2):
-    end = time.ticks_ms() + int(duration_s * 1000)
-    while time.ticks_ms() < end:
-        led.on();  time.sleep(interval)
-        led.off(); time.sleep(interval)
 # Alarme parameter
-ALARM_HOUR = 15
-ALARM_MIN  = 18
-ALARM_SECOND = 00
-ALARM_DURATION = 10
+ALARM_HOUR = 16
+ALARM_MIN  = 51
+ALARM_SECOND = 20
+ALARM_DURATION = 6
+# Alarme buzzer
+def alarm_buzzer(ALARM_DURATION):
+    """Fait biper le buzzer actif pendant 'duration' secondes."""
+    end_time = time.time() + ALARM_DURATION
+
+    while time.time() < end_time:
+        buzzer.on()
+        time.sleep(0.1)    # ON 100 ms
+        buzzer.off()
+        time.sleep(0.1)    # OFF 100 ms
 
 def wifi_connect(timeout=20):
     wlan = network.WLAN(network.STA_IF)
@@ -56,7 +62,7 @@ try:
         print(f"{h:02d}:{m:02d}:{s:02d}", end="\r")
 
         if h == ALARM_HOUR and m == ALARM_MIN and s == ALARM_SECOND and not triggered:
-            blink_led(ALARM_DURATION)
+            alarm_buzzer(ALARM_DURATION)
             triggered = True
 
         if h != ALARM_HOUR or m != ALARM_MIN or s != ALARM_SECOND:
