@@ -1,36 +1,67 @@
+# 🕒 ESP32 IoT Smart Clock
 
-# Project Title
+This project is a multifunction smart clock based on an ESP32 (FireBeetle). It displays time synchronized via the internet (NTP), environmental data (Temperature/Humidity), and features a menu system navigable via a rotary encoder.
 
-A brief description of what this project does and who it's for
+## 🚀 Features
 
+* **Accurate Time**: Automatic synchronization via WiFi (NTP).
+* **Environmental Sensors**: Temperature and Humidity reading via DHT12.
+* **User Interface**: SH1106 OLED Display managed by a rotary encoder.
+* **Menus**:
+    1.  Time & Alarm.
+    2.  Indoor Weather (Temp/Hum).
+    3.  Air Quality (Placeholder for future extension).
+* **Alarm**: Audible (Buzzer) and visual (LED) notification.
 
-## Demo
+## 🛠 Hardware Requirements
 
-Insert gif or link to demo
+* **Microcontroller**: ESP32 (FireBeetle model or compatible).
+* **Display**: 1.3" OLED Screen (SH1106 Driver) - I2C Interface.
+* **Sensor**: DHT12 (Temperature & Humidity) - I2C Interface.
+* **Input**: Rotary Encoder (Ky-040 or similar).
+* **Outputs**: Passive Buzzer, LED.
 
+## 🔌 Wiring (Pinout)
 
-## Deployment
+Here is the complete connection table between the ESP32 and the components.
 
-To deploy this project run
+| Component | Component Pin | ESP32 Pin (GPIO) | Function |
+| :--- | :--- | :--- | :--- |
+| **I2C Bus** | SDA | **GPIO 21** | Data (Screen + DHT12) |
+| | SCL | **GPIO 22** | Clock (Screen + DHT12) |
+| **Power** | VCC | **3V3** | System Power |
+| | GND | **GND** | Common Ground |
+| **Encoder** | CLK (A) | **GPIO 18** | Rotation A |
+| | DT (B) | **GPIO 19** | Rotation B |
+| | SW (Switch) | **GPIO 4** | Push Button (Click) |
+| **Actuators** | LED | **GPIO 2** | Alarm Indicator |
+| | Buzzer | **GPIO 27** | Beeper |
 
-| Fonction | Pin ESP32 (FireBeetle) | Écran OLED (I2C) | Horloge RTC (DS3231) | Rotary Encoder |
-| :--- | :--- | :--- | :--- | :--- |
-| **SDA (Données)** | **GPIO 21** (Violet) | SDA | SDA | - |
-| **SCL (Horloge)** | **GPIO 22** (Violet) | SCK ou SCL | SCL | - |
-| **Alim (+)** | **3V3** (Rouge) | VCC | VCC | **+** |
-| **Masse (-)** | **GND** (Noir) | GND | GND | **GND** |
-| **Rotary A** | **GPIO 18** (Jaune) | - | - | **CLK** |
-| **Rotary B** | **GPIO 19** (Jaune) | - | - | **DT** |
-| **Bouton** | **GPIO 4** (Vert) | - | - | **SW** |
-| **LED Alarme** | **GPIO 2 / D9** | - | - | - |
-| *Non connecté* | - | - | 32K, SQW | - |
+> **Note**: The I2C bus (GPIO 21 & 22) is shared. The OLED screen and the DHT12 sensor must be connected to these same pins in parallel.
 
-```bash
-  npm run deploy
-```
+## 📂 Project Structure
 
-![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
+The code is modular to facilitate maintenance:
 
-<img width="920" height="680" alt="image" src="https://github.com/user-attachments/assets/873a69fd-65e4-45c0-b58c-8d0a407b4ca0" />
-<img width="773" height="338" alt="image" src="https://github.com/user-attachments/assets/e26594f9-a759-4029-9b4d-d29d921d3090" />
+* `Main.py`: Entry point. Initializes hardware and manages the main loop.
+* `Clock.py`: Manages WiFi connection and NTP synchronization.
+* `Screen_UI.py`: Handles drawing the graphical interface on the OLED.
+* `temp_censor.py`: Driver for reading the DHT12 sensor.
+* `Lib/`: Folder containing external libraries (`sh1106.py`, `rotary_irq.py`).
 
+## ⚙️ Installation and Configuration
+
+### 1. Prerequisites
+* Install **Python** and an IDE (Thonny IDE or VS Code with Pymakr extension).
+* Flash **MicroPython** firmware onto the ESP32.
+
+### 2. File Installation
+Copy all `.py` files and the `Lib` folder to the root of the ESP32.
+
+### 3. WiFi Configuration
+Open the `Clock.py` file and modify the following lines with your credentials:
+
+```python
+WIFI_SSID = "YOUR_SSID"
+WIFI_PSK  = "YOUR_PASSWORD"
+TZ_OFFSET_H = 1  # Adjust according to your time zone (e.g., 1 for CET, 2 for CEST)
