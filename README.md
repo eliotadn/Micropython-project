@@ -1,6 +1,6 @@
 # 🕒 ESP32 IoT Smart Clock
 
-This project is a multifunction smart clock based on an ESP32 (FireBeetle). It displays time synchronized via the internet (NTP), environmental data (Temperature/Humidity), and features a menu system navigable via a rotary encoder.
+This project is a multifunction smart clock based on an ESP32. It displays time synchronized via the internet (NTP), environmental data (Temperature/Humidity), and features a menu system navigable via a rotary encoder.
 
 ## 🚀 Features
 
