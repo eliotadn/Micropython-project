@@ -39,9 +39,7 @@ Here is the complete connection table between the ESP32 and the components.
 
 > **Note**: The I2C bus (GPIO 21 & 22) is shared. The OLED screen and the DHT12 sensor must be connected to these same pins in parallel.
 >
-> <img width="920" height="680" alt="image" src="https://github.com/user-attachments/assets/873a69fd-65e4-45c0-b58c-8d0a407b4ca0" />
-  <img width="773" height="338" alt="image" src="https://github.com/user-attachments/assets/e26594f9-a759-4029-9b4d-d29d921d3090" />
-
+> 
 ## 📂 Project Structure
 
 The code is modular to facilitate maintenance:
