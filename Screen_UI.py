@@ -1,23 +1,40 @@
-from machine import Pin, I2C
-from rotary_irq import RotaryIRQ
+# Screen_UI.py
 from sh1106 import SH1106_I2C
-import time
 
-i2c = I2C(0, scl=Pin(22), sda=Pin(21), freq=400000)
-oled = SH1106_I2C(i2c)
-oled.fill(0)
-oled.show()
+def init_screen(i2c):
+    # Initialize screen with provided I2C bus
+    oled = SH1106_I2C(128, 64, i2c)
+    oled.flip(1) # Flip if needed
+    return oled
 
-r = RotaryIRQ(pin_num_clk=18, pin_num_dt=19, min_val=0, max_val=999,
-              reverse=False, range_mode=RotaryIRQ.RANGE_WRAP)
+def draw_interface(oled, menu_index, time_str, temp, hum, alarm_h, alarm_m):
+    oled.fill(0) # Clear screen
+    
+    # --- MENU 0 : TIME ---
+    if menu_index == 0:
+        oled.text("TIME", 48, 0)
+        oled.line(0, 10, 128, 10, 1)
+        oled.text(time_str, 25, 30)
+        oled.text(f"Alarm: {alarm_h:02d}:{alarm_m:02d}", 10, 50)
+    
+    # --- MENU 1 : WEATHER ---
+    elif menu_index == 1:
+        oled.text("WEATHER", 36, 0)
+        oled.line(0, 10, 128, 10, 1)
+        if temp is not None:
+            oled.text(f"Temp: {temp:.1f} C", 0, 25)
+            oled.text(f"Hum : {hum:.1f} %", 0, 45)
+        else:
+            oled.text("Sensor Error", 0, 30)
 
-val_prec = r.value()
+    # --- MENU 2 : AIR QUALITY ---
+    elif menu_index == 2:
+        oled.text("AIR QUALITY", 20, 0)
+        oled.line(0, 10, 128, 10, 1)
+        oled.text("CO2: -- ppm", 0, 30) 
+        oled.text("Quality: --", 0, 45)
 
-while True:
-    val = r.value()
-    if val != val_prec:
-        val_prec = val
-        oled.fill(0)
-        oled.text(str(val), 50, 30)
-        oled.show()
-    time.sleep_ms(50)
+    # Page indicator (dots at bottom)
+    oled.text("." * (menu_index + 1), 60, 55)
+    
+    oled.show()
