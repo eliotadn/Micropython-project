@@ -1,10 +1,24 @@
-# Screen_UI.py
 from sh1106 import SH1106_I2C
 
 def init_screen(i2c):
-    # Initialize screen with provided I2C bus
-    oled = SH1106_I2C(128, 64, i2c)
-    oled.flip(1) # Flip if needed
+    # --- CORRECTION INIT ---
+    # Tente d'initialiser en passant l'objet i2c en premier (standard pour sh1106)
+    try:
+        oled = SH1106_I2C(128, 64, i2c)
+    except TypeError:
+        # Si ça échoue, on tente la version simplifiée sans dimensions
+        oled = SH1106_I2C(i2c)
+    except Exception:
+        # Dernière tentative : i2c, largeur, hauteur
+        oled = SH1106_I2C(i2c, 128, 64)
+
+    # --- CORRECTION FLIP ---
+    # La ligne oled.flip(1) a été supprimée car elle n'existe pas.
+    
+    # SI L'ÉCRAN EST À L'ENVERS : Décommentez les 2 lignes ci-dessous :
+    # oled.write_cmd(0xC8) 
+    # oled.write_cmd(0xA1)
+    
     return oled
 
 def draw_interface(oled, menu_index, time_str, temp, hum, alarm_h, alarm_m):
