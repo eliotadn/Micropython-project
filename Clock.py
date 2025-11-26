@@ -36,3 +36,4 @@ def get_local_time():
     h, m, s = lt[3], lt[4], lt[5]
     time_str = "{:02d}:{:02d}:{:02d}".format(h, m, s)
     return h, m, s, time_str
+
