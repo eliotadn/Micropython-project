@@ -2,9 +2,9 @@ from machine import Pin, I2C
 from rotary_irq import RotaryIRQ
 import time
 
-# File imports
-import Clock
+# --- CORRECTION DES IMPORTS (Plus de .py) ---
 import temp_censor
+import Clock
 import Screen_UI
 
 # --- HARDWARE CONFIGURATION ---
@@ -22,8 +22,8 @@ r = RotaryIRQ(pin_num_clk=18, pin_num_dt=19, min_val=0, max_val=2,
 buzzer = Pin(27, Pin.OUT)
 
 # --- ALARM SETTINGS ---
-ALARM_HOUR = 16
-ALARM_MIN  = 51
+ALARM_HOUR = 15
+ALARM_MIN  = 43
 alarm_active = False
 
 def trigger_alarm():
@@ -33,7 +33,13 @@ def trigger_alarm():
         buzzer.off(); time.sleep(0.1)
 
 # --- STARTUP ---
-oled.text("Connecting...", 0, 0); oled.show()
+# On utilise un try/except pour l'affichage initial au cas où l'écran n'est pas prêt
+try:
+    oled.text("Connecting...", 0, 0)
+    oled.show()
+except Exception as e:
+    print("Screen warning:", e)
+
 Clock.connect_wifi()
 Clock.sync_time()
 
@@ -55,6 +61,7 @@ while True:
         
         # 3. Sensor reading (every 2s)
         if time.time() - last_sensor_read > 2:
+            # Note: Assurez-vous que temp_censor a bien une fonction read_dht12
             t, hum = temp_censor.read_dht12(i2c)
             if t is not None:
                 cur_temp = t
@@ -74,4 +81,5 @@ while True:
         print("Stopped.")
         break
     except Exception as e:
-        print("Error:", e)
+        print("Error in loop:", e)
+        time.sleep(1) # Pause pour éviter de spammer l'erreur
