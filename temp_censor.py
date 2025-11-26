@@ -22,3 +22,4 @@ def read_dht12(i2c):
     except Exception as e:
 
         return None, None
+
