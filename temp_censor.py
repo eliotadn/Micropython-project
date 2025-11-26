@@ -1,25 +1,18 @@
+# Assuming DHT12 I2C sensor at address 0x5C
 import time
 
-DHT12_ADDR = 0x5c
-
 def read_dht12(i2c):
-    """Reads temperature and humidity via the provided I2C object"""
     try:
-        i2c.writeto(DHT12_ADDR, b'\x00')
-        data = i2c.readfrom(DHT12_ADDR, 5)
+        i2c.writeto(0x5C, b'\x00')
+        data = i2c.readfrom(0x5C, 5)
         
-        hum = data[0] + data[1] / 10
-        temp = data[2] + (data[3] & 0x7F) / 10
-        
-        if data[3] & 0x80:
-            temp = -temp
-            
-        chk = (data[0] + data[1] + data[2] + data[3]) & 0xFF
-        if chk != data[4]:
-            return None, None
-            
-        return temp, hum
-    except Exception as e:
-
-        return None, None
-
+        # Checksum
+        if (data[0] + data[1] + data[2] + data[3]) & 0xFF == data[4]:
+            hum = data[0] + data[1] * 0.1
+            temp = data[2] + (data[3] & 0x7F) * 0.1
+            if data[3] & 0x80:
+                temp = -temp
+            return temp, hum
+    except:
+        pass
+    return None, None
