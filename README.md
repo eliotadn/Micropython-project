@@ -22,6 +22,7 @@ This project is a multifunction smart clock based on an ESP32. It displays time 
 * **Outputs**: Passive Buzzer, LED.
 
 ## 🔌 Wiring (Pinout)
+<img width="774" height="667" alt="image" src="https://github.com/user-attachments/assets/6e0c7c3c-4b15-4256-abb5-c4ab0e103bf0" />
 
 Here is the complete connection table between the ESP32 and the components.
 
