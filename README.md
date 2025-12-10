@@ -15,10 +15,10 @@ This project is a multifunction smart clock based on an ESP32. It displays time 
 
 ## 🛠 Hardware Requirements
 
-* **Microcontroller**: ESP32 (FireBeetle model or compatible).
+* **Microcontroller**: ESP32.
 * **Display**: 1.3" OLED Screen (SH1106 Driver) - I2C Interface.
 * **Sensor**: DHT12 (Temperature & Humidity) - I2C Interface.
-* **Input**: Rotary Encoder (Ky-040 or similar).
+* **Input**: Rotary Encoder.
 * **Outputs**: Passive Buzzer, LED.
 
 ## 🔌 Wiring (Pinout)
